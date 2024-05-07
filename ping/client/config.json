@@ -1,0 +1,16 @@
+{
+  "pingClientNum": 1,
+  "pingEnodeNum": 1,
+  "pingBnodeNum": 1,
+  "pingIsTest": true,
+  "pingBatchNum": 10,
+  "pingClientIpPort": [
+    "10.1.0.28:22001"
+  ],
+  "pingEnodeIpPort": [
+    "10.1.0.112:22001"
+  ],
+  "pingBnodeIpPort": [
+    "10.1.0.36:22002"
+  ]
+}

@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -23,14 +25,14 @@ int pingBatchNum
 */
 
 type PingClientConfig struct {
-	PingClientNum    int
-	PingEnodeNum     int
-	PingBnodeNum     int
-	PingIsTest       bool
-	PingBatchNum     int
-	PingClientIpPort []string
-	PingEnodeIpPort  []string
-	PingBnodeIpPort  []string
+	PingClientNum    int      `json:"pingClientNum"`
+	PingEnodeNum     int      `json:"pingEnodeNum"`
+	PingBnodeNum     int      `json:"pingBnodeNum"`
+	PingIsTest       bool     `json:"pingIsTest"`
+	PingBatchNum     int      `json:"pingBatchNum"`
+	PingClientIpPort []string `json:"pingClientIpPort"`
+	PingEnodeIpPort  []string `json:"pingEnodeIpPort"`
+	PingBnodeIpPort  []string `json:"pingBnodeIpPort"`
 }
 
 type ConfigArg interface{}
@@ -42,17 +44,12 @@ func getConfig(arg ConfigArg) (config PingClientConfig) {
 		config, ok = getConfigFromFile(arg)
 		if !ok {
 			fmt.Println("Failed to get config from file, getting from user")
-			config = getConfigFromUser()
-		}
-	case []string:
-		config, ok = getConfigFromArgs(arg)
-		if !ok {
-			fmt.Println("Failed to get config from args, getting from user")
-			config = getConfigFromUser()
+			// config = getConfigFromUser()
 		}
 	default:
 		fmt.Println("Unsupported argument type")
 	}
+	return
 }
 
 func getConfigFromFile(filename string) (config PingClientConfig, ok bool) {
@@ -78,17 +75,41 @@ func getConfigFromFile(filename string) (config PingClientConfig, ok bool) {
 	}
 }
 
-func getConfigFromArgs(args []string) (config PingClientConfig, ok bool) {
-	fmt.Println("Getting config from args:", args)
-	return config, true
-}
+// func main() {
+// 	getConfig("config.json")
+// 	fmt.Println("Hello, ping-client!")
+// }
 
-func getConfigFromUser() (config PingClientConfig) {
-	fmt.Println("Getting config from user")
-	return config
-}
+// 1. 读取配置文件
+// 2. 连接e
+// 3. 循环
+//    1. 消息输入
+//    2. 消息组装
+//       1. 用消息格式匹配下
+//       2. 获取同步信息（所以同步click是个独立线程）
+//       3. 组装
+//    3. 扔进发送池（所以消息发送也是个独立线程）
+//    4. （所以消息返回后处理也是个独立线程）
 
 func main() {
-	getConfig("config.json")
-	fmt.Println("Hello, ping-client!")
+	// 1. 读取配置文件
+	config := PingClientConfig{
+		PingClientNum:    1,
+		PingEnodeNum:     32,
+		PingBnodeNum:     32,
+		PingIsTest:       false,
+		PingBatchNum:     1,
+		PingClientIpPort: []string{"10.1.0.28:22001"},
+		PingEnodeIpPort: []string{
+			"10.1.0.112:22001",
+			// 其他的enode地址
+		},
+		PingBnodeIpPort: []string{
+			"10.1.0.36:22002",
+			// 其他的bnode地址
+		},
+	}
+	// 2. 连接e
+	connection2Enode := make([])
+	
 }
