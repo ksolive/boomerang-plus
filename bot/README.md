@@ -45,3 +45,5 @@ qq官方机器，使用gobot sdk，用于收集信息以及回复信息
 #### 展示信息
 
 #### 删除管理
+
+<!-- go mod init github.com/ksolive/bots -->
