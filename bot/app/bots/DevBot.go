@@ -13,11 +13,36 @@ import (
 // 最简单的模拟bot，不断向后输出随机结果
 // bot 结构：消息获取，消息处理，消息后发
 type Bot struct {
-	name string
+	name        string
+	accessToken string
 }
 
-func NewBot(name string) *Bot {
-	return &Bot{name: name}
+type BotGlobal struct {
+	bots        map[string]*Bot
+	accessToken string
+}
+
+var botGlobal BotGlobal
+
+// TODO 要看下怎么样比较好，在这全部初始化了还是其他什么的
+func NewBot(name string, botConfig config.BotConfig) *Bot {
+	if botGlobal.accessToken == "" {
+		accessToken, ok := getAppAccessToken(botConfig.AppId, botConfig.ClientSecret)
+		if ok != nil {
+			fmt.Println("Error:", ok)
+			return nil
+		} else {
+			fmt.Println("accessToken:", accessToken)
+			return &Bot{accessToken: accessToken, name: name}
+		}
+	}
+	if botGlobal.accessToken == "" {
+		fmt.Println("Error: no accessToken")
+		return nil
+	} else {
+		fmt.Println("accessToken:", botGlobal.accessToken)
+		return &Bot{accessToken: botGlobal.accessToken, name: name}
+	}
 }
 
 func (b *Bot) getMessage() string {
@@ -56,9 +81,8 @@ func (b *Bot) Run() {
 }
 
 func init() {
-	params := config.LoadConfig()
-	for i := 0; i < params.BotNum; i++ {
-		bot := NewBot(fmt.Sprintf("bot-%d", i))
-		go bot.Run()
+	botGlobal = BotGlobal{
+		bots:        make(map[string]*Bot),
+		accessToken: "",
 	}
 }

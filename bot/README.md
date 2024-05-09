@@ -11,6 +11,7 @@
 * 储存模块
 * 管理展示模块
 * 模块间mq
+* config模块
 
 ### 机器人模块
 
@@ -45,5 +46,25 @@ qq官方机器，使用gobot sdk，用于收集信息以及回复信息
 #### 展示信息
 
 #### 删除管理
+
+### 模块间mq
+
+使用redis作为消息队列，用于模块间通信，包含bot2nlp、nlp2store、store2web等通道
+
+#### bot2nlp
+
+#### nlp2store
+
+#### store2web
+
+### config模块
+
+用于配置文件的读取，包含机器人配置、数据库配置、mq配置等
+
+#### 机器人配置
+
+#### 数据库配置
+
+#### mq配置
 
 <!-- go mod init github.com/ksolive/bots -->
